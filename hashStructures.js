@@ -27,16 +27,16 @@ class Dictionary {
   //Big-O time = O(1), constant
   addNode(data) {
     if (!this.headNode) {
-      this.addFirstHead(data);
+      this.addFirstNode(data);
     } else {
-      const node = new Node(data, null);
+      const node = new Word(data, null);
       this.lastNode.next = node;
       this.lastNode = node;
     }
   }
 
   addNodeIndex(data, index) {
-    const node = new Node(data, null);
+    const node = new Word(data, null);
     let counter = 0;
     let currentNode = this.headNode;
     let prevNode = null;
@@ -78,10 +78,13 @@ class Dictionary {
     // Big-O time = O(n), linear time
     while (counter < index) {
       currentNode = currentNode.next;
-      console.log(`Counter = ${counter} Current Node = ${currentNode}`);
       ++counter;
     }
-
+    console.log(
+      `Counter = ${counter} Current Node = ${currentNode.data.word} : ${
+        currentNode.data.definition
+      }`
+    );
     return currentNode;
   }
 
@@ -90,9 +93,9 @@ class Dictionary {
     let currentNode = this.headNode;
     let previousNode = null;
     let nextNode = currentNode.next;
-    this.headNode = this.tailNode;
-    this.tailNode = currentNode;
-    this.tailNode.next = null;
+    this.headNode = this.lastNode;
+    this.lastNode = currentNode;
+    this.lastNode.next = null;
 
     while (nextNode !== null) {
       previousNode = currentNode;
@@ -104,7 +107,7 @@ class Dictionary {
 
   printList() {
     let currentNode = this.headNode;
-    while (currentNode.next !== null) {
+    while (currentNode !== null) {
       console.log(currentNode.data);
       currentNode = currentNode.next;
     }
@@ -114,19 +117,54 @@ class Dictionary {
 const Webster = new Dictionary();
 
 let words = [
-  { word: "cat", definition: "a feline pet with an attitude" },
-  { word: "dog", definition: "a canine pet that's loyal" },
+  { word: 'cat', definition: 'a feline pet with an attitude' },
+  { word: 'dog', definition: "a canine pet that's loyal" },
   {
-    word: "couger",
+    word: 'couger',
     definition:
-      "an old woman who hunts younger males of the same species aggressively"
+      'an old woman who hunts younger males of the same species aggressively'
   },
   {
-    word: "vulture",
-    definition: "a pretend friend who habitually siphons resources"
+    word: 'vulture',
+    definition: 'a pretend friend who habitually siphons resources'
   },
-  { word: "dawg", definition: "gangsta's BFF" },
-  { word: "bird", definition: "it's for the birds" },
-  { word: "chicken", definition: "a cowardly wuss" },
-  { word: "snake", definition: "a double crossing, backstabbing person" }
+  { word: 'dawg', definition: "gangsta's BFF" },
+  { word: 'bird', definition: "it's for the birds" },
+  { word: 'chicken', definition: 'a cowardly wuss' },
+  { word: 'snake', definition: 'a double crossing, backstabbing person' }
 ];
+
+const hydrate = arr => {
+  arr.forEach(data => Webster.addNode(data));
+};
+
+Webster.initialize();
+hydrate(words);
+Webster.printList();
+
+console.log('=========================');
+console.log('Adding Fox');
+console.log('=========================');
+
+Webster.addNodeIndex({ word: 'fox', definition: 'sly crafty individual' }, 5);
+Webster.printList();
+
+console.log('=========================');
+console.log('Removing Chicken');
+console.log('=========================');
+
+Webster.removeNode(7);
+Webster.printList();
+
+console.log('=========================');
+console.log('Finding Cougar');
+console.log('=========================');
+
+Webster.findNode(2);
+
+console.log('=========================');
+console.log('Reversing List');
+console.log('=========================');
+
+Webster.reverse();
+Webster.printList();
