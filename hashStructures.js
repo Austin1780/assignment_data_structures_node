@@ -1,3 +1,5 @@
+const dictionaryJSON = require("./dictionary.json");
+
 class Word {
   constructor(data, next) {
     this.data = {
@@ -118,21 +120,21 @@ class Dictionary {
 const Webster = new Dictionary();
 
 let words = [
-  { word: 'cat', definition: 'a feline pet with an attitude' },
-  { word: 'dog', definition: "a canine pet that's loyal" },
+  { word: "cat1", definition: "a feline pet with an attitude" },
+  { word: "dog1", definition: "a canine pet that's loyal" },
   {
-    word: 'couger',
+    word: "cougar1",
     definition:
-      'an old woman who hunts younger males of the same species aggressively'
+      "an old woman who hunts younger males of the same species aggressively"
   },
   {
-    word: 'vulture',
-    definition: 'a pretend friend who habitually siphons resources'
+    word: "vulture1",
+    definition: "a pretend friend who habitually siphons resources"
   },
-  { word: 'dawg', definition: "gangsta's BFF" },
-  { word: 'bird', definition: "it's for the birds" },
-  { word: 'chicken', definition: 'a cowardly wuss' },
-  { word: 'snake', definition: 'a double crossing, backstabbing person' }
+  { word: "dawg", definition: "gangsta's BFF" },
+  { word: "bird1", definition: "it's for the birds" },
+  { word: "chicken1", definition: "a cowardly wuss" },
+  { word: "snake1", definition: "a double crossing, backstabbing person" }
 ];
 
 // const hydrate = arr => {
@@ -171,7 +173,7 @@ let words = [
 // Webster.printList();
 
 class HashTable {
-  constructor() {
+  constructor(dictionaryJSON) {
     this.buckets = [];
 
     this.indexes = {
@@ -203,16 +205,22 @@ class HashTable {
       z: 25
     };
 
-    this.initialize = () => {
-      for (let i = 0; i < this.indexes.length; i++) {
-        this.indexes[i] = new Dictionary();
-        this.indexes[i].initialize();
-      }
-    };
+    this.data = dictionaryJSON;
+  }
+
+  initialize() {
+    for (let i = 0; i < 26; i++) {
+      this.buckets[i] = new Dictionary();
+      this.buckets[i].initialize();
+    }
+    console.log(this.data);
+    for (let key in this.data) {
+      HashBrowns.insert({ word: key, definition: this.data[key] });
+    }
   }
 
   hash(word) {
-    return this.indexes[word[0]];
+    return this.indexes[word.word[0]];
   }
 
   insert(word) {
@@ -225,18 +233,72 @@ class HashTable {
     }
   }
 
+  define(word) {
+    let counter = 0;
+    const index = this.indexes[word[0]];
+    const arrayIndex = this.buckets[index];
+    if (!arrayIndex) {
+      counter++;
+      return console.log("entry not found");
+    } else {
+      let currentNode = arrayIndex.headNode;
+      while (currentNode !== null) {
+        counter++;
+        if (currentNode.data.word === word) {
+          return console.log(
+            `Word: ${currentNode.data.word} Definition: ${
+              currentNode.data.definition
+            } Counter: ${counter}`
+          );
+        }
+        currentNode = currentNode.next;
+      }
+      return console.log(`entry not found. Counter: ${counter}`);
+    }
+  }
+
   renderList() {
-    for (let i = 0; i < this.indexes.length; i++) {
-      this.indexes[i].printList();
-      console.log('--------------------');
+    for (let i = 0; i < 26; i++) {
+      this.buckets[i].printList();
+      console.log("--------------------");
     }
   }
 }
 
-const HashBrowns = new HashTable();
+const HashBrowns = new HashTable(dictionaryJSON);
+
 HashBrowns.initialize();
 HashBrowns.insert({
-  word: 'weasel',
-  definition: 'That uncle everyone avoids at Thanksgiving'
+  word: "weasel1",
+  definition: "That uncle everyone avoids at Thanksgiving"
 });
+
+const hydrate = arr => {
+  arr.forEach(data => HashBrowns.insert(data));
+};
+hydrate(words);
+
+// const transform = () => {
+// fs.readFile("./dictionary.json", "utf8", (err, data) => {
+//   if (err) {
+//     console.error(err);
+//   }
+//   console.log(`Successfully loaded!`);
+//   data = JSON.parse(data);
+//   for (let key in data) {
+//     HashBrowns.insert({ word: key, definition: data[key] });
+//   }
+// });
+// };
+
 HashBrowns.renderList();
+console.log("=========finding weasel==========");
+HashBrowns.define("weasel1");
+console.log("=========finding dawg==========");
+HashBrowns.define("dawg");
+console.log("=========finding cougar==========");
+HashBrowns.define("cougar1");
+console.log("=========finding chested==========");
+HashBrowns.define("chested");
+console.log("=========finding bagpipe==========");
+HashBrowns.define("bagpipe");
