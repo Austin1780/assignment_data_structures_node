@@ -87,7 +87,8 @@ class Dictionary {
     );
     return currentNode;
   }
-
+  //Big O = O(n) linear time. has to iterate through each list item and manually alter
+  //Modifies it in place. No new nodes created.
   reverse() {
     let counter = 0;
     let currentNode = this.headNode;
@@ -134,37 +135,108 @@ let words = [
   { word: 'snake', definition: 'a double crossing, backstabbing person' }
 ];
 
-const hydrate = arr => {
-  arr.forEach(data => Webster.addNode(data));
-};
+// const hydrate = arr => {
+//   arr.forEach(data => Webster.addNode(data));
+// };
+//
+// Webster.initialize();
+// hydrate(words);
+// Webster.printList();
+//
+// console.log('=========================');
+// console.log('Adding Fox');
+// console.log('=========================');
+//
+// Webster.addNodeIndex({ word: 'fox', definition: 'sly crafty individual' }, 5);
+// Webster.printList();
+//
+// console.log('=========================');
+// console.log('Removing Chicken');
+// console.log('=========================');
+//
+// Webster.removeNode(7);
+// Webster.printList();
+//
+// console.log('=========================');
+// console.log('Finding Cougar');
+// console.log('=========================');
+//
+// Webster.findNode(2);
+//
+// console.log('=========================');
+// console.log('Reversing List');
+// console.log('=========================');
+//
+// Webster.reverse();
+// Webster.printList();
 
-Webster.initialize();
-hydrate(words);
-Webster.printList();
+class HashTable {
+  constructor() {
+    this.buckets = [];
 
-console.log('=========================');
-console.log('Adding Fox');
-console.log('=========================');
+    this.indexes = {
+      a: 0,
+      b: 1,
+      c: 2,
+      d: 3,
+      e: 4,
+      f: 5,
+      g: 6,
+      h: 7,
+      i: 8,
+      j: 9,
+      k: 10,
+      l: 11,
+      m: 12,
+      n: 13,
+      o: 14,
+      p: 15,
+      q: 16,
+      r: 17,
+      s: 18,
+      t: 19,
+      u: 20,
+      v: 21,
+      w: 22,
+      x: 23,
+      y: 24,
+      z: 25
+    };
 
-Webster.addNodeIndex({ word: 'fox', definition: 'sly crafty individual' }, 5);
-Webster.printList();
+    this.initialize = () => {
+      for (let i = 0; i < this.indexes.length; i++) {
+        this.indexes[i] = new Dictionary();
+        this.indexes[i].initialize();
+      }
+    };
+  }
 
-console.log('=========================');
-console.log('Removing Chicken');
-console.log('=========================');
+  hash(word) {
+    return this.indexes[word[0]];
+  }
 
-Webster.removeNode(7);
-Webster.printList();
+  insert(word) {
+    const index = this.hash(word);
+    const arrayIndex = this.buckets[index];
+    if (!arrayIndex) {
+      arrayIndex.addFirstNode(word);
+    } else {
+      arrayIndex.addNode(word);
+    }
+  }
 
-console.log('=========================');
-console.log('Finding Cougar');
-console.log('=========================');
+  renderList() {
+    for (let i = 0; i < this.indexes.length; i++) {
+      this.indexes[i].printList();
+      console.log('--------------------');
+    }
+  }
+}
 
-Webster.findNode(2);
-
-console.log('=========================');
-console.log('Reversing List');
-console.log('=========================');
-
-Webster.reverse();
-Webster.printList();
+const HashBrowns = new HashTable();
+HashBrowns.initialize();
+HashBrowns.insert({
+  word: 'weasel',
+  definition: 'That uncle everyone avoids at Thanksgiving'
+});
+HashBrowns.renderList();
