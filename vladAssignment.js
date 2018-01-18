@@ -13,17 +13,21 @@ const binaryMaker = (n, param = 0, possibilityArray = []) => {
   } else if (n >= 2 && param === 0) {
     // console.log( binaryMaker(Math.floor(n/2), 1) binaryMaker(Math.floor(n/2), 0))
     for (let i = 0; i < total; i++) {
-      possibilityArray.push('1');
+      possibilityArray.push("1");
     }
     return binaryMaker(n, param + 1, possibilityArray);
-  } else if (param > 0 ) {
+  } else if (param > 0) {
     for (let i = 0; i < total; i++) {
       // if (i > 0.5 * total) {
       //   possibilityArray[i] += '1';
       // } else {
       //   possibilityArray[i] += '0';
       // }
-      possibilityArray[i] += ((Math.floor((total/(possibilityArray[i].length + 1)))%(i ))%2).toString();
+
+      possibilityArray[i] += (
+        (Math.floor(total / (possibilityArray[i].length + 1)) % i) %
+        2
+      ).toString();
       // if(total / (possibilityArray[i].length + 1) === 1){
       //   possibilityArray[i] += '1';
       // }
@@ -38,4 +42,4 @@ const binaryMaker = (n, param = 0, possibilityArray = []) => {
   }
 };
 
-console.log(binaryMaker(5))
+console.log(binaryMaker(5));
