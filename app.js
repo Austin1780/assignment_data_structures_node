@@ -24,7 +24,5 @@ console.log("=========finding dawg==========");
 HashBrowns.define("dawg");
 console.log("=========finding cougar==========");
 HashBrowns.define("cougar1");
-console.log("=========finding chested==========");
-HashBrowns.define("chested");
 console.log("=========finding bagpipe==========");
 HashBrowns.define("bagpipe");
